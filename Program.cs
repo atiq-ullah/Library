@@ -1,18 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Library;
-using System.Web;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Library;
+// using System.Net.Http.Json;
 
-Console.WriteLine("Hello, World!");
-Author auth = new Author("JK Rowling");
-Book book = new Book("Harry Potter and the Philosophers Stone", auth, "");
-Console.WriteLine(book.Title);
-Console.WriteLine(book.Author.Name);
+// const string bookSearchUrl = "https://openlibrary.org/search.json?q=the+lord+of+the+rings";
+HttpClient sharedClient = new HttpClient();
 
-string bookSearchUrl = "https://openlibrary.org/search.json?q=the+lord+of+the+rings";
+string title = "Harry Potter and the Philosophers Stone";
+List<Book> books = new List<Book>();
+Author auth = new Author("J.K Rowling", books);
+Book b = new Book(title , auth, "", "");
+books.Append(b);
 
-HttpClient sharedClient = new();
-
-Task<string> result = sharedClient.GetStringAsync(bookSearchUrl);
-Console.WriteLine(result.Result.ToString());
+Console.WriteLine(books.Count());
