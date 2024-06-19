@@ -7,3 +7,5 @@ bin/Debug/net8.0/Newtonsoft.Json.dll
 bin/Debug/net8.0/Spectre.Console.dll
 obj
 .DS_Store
+bin/Debug/net8.0
+db.sqlite3
