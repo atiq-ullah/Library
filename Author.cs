@@ -1,13 +1,13 @@
 namespace Library
 {
-  public class Author
-  {
-    public Author(string name)
+    public class Author
     {
-      Name = name;
-   }
+        public Author(string name)
+        {
+            Name = name;
+        }
 
-    public string Name { get; set; }
-  }
+        public string Name { get; set; }
+    }
 
 }

@@ -1,13 +1,13 @@
 namespace Library
 {
-  public class Book
-  {
-    public Book(string title)
+    public class Book
     {
-      Title = title;
-    }
+        public Book(string title)
+        {
+            Title = title;
+        }
 
-    public string Title { get; set; }
-  }
+        public string Title { get; set; }
+    }
 
 }

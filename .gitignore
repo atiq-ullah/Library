@@ -1,0 +1,9 @@
+bin/Debug/net8.0/Library
+bin/Debug/net8.0/Library.deps.json
+bin/Debug/net8.0/Library.dll
+bin/Debug/net8.0/Library.pdb
+bin/Debug/net8.0/Library.runtimeconfig.json
+bin/Debug/net8.0/Newtonsoft.Json.dll
+bin/Debug/net8.0/Spectre.Console.dll
+obj
+.DS_Store
