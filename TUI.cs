@@ -10,7 +10,7 @@ namespace Library
             return AnsiConsole.Ask<string>("Enter a book [green]name[/]: ");
         }
 
-        public static void OutputResult(string[] rows)
+        public static string OutputResult(string[] rows)
         {
             var selection = AnsiConsole.Prompt(
              new SelectionPrompt<string>()
@@ -20,6 +20,7 @@ namespace Library
                   .AddChoices(rows)
                 );
 
+            return selection;
         }
 
     }
