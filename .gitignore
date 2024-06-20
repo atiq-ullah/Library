@@ -9,3 +9,4 @@ obj
 .DS_Store
 bin/Debug/net8.0
 db.sqlite3
+CommitMono

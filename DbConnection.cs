@@ -102,7 +102,7 @@ namespace Library
                     command.Parameters.AddWithValue("@title", title);
                     using (var reader = command.ExecuteReader())
                         while (reader.Read())
-                          return true;
+                            return true;
                     return false;
                 }
             }
@@ -128,12 +128,12 @@ namespace Library
                     {
                         while (reader.Read())
                         {
-                          var key = reader.GetString(0);
-                          var title = reader.GetString(1);
-                          var authors = reader.GetString(2);
+                            var key = reader.GetString(0);
+                            var title = reader.GetString(1);
+                            var authors = reader.GetString(2);
 
-                          Book b = new Book(title, authors, key);
-                          books.Add(b);
+                            Book b = new Book(title, authors, key);
+                            books.Add(b);
                         }
                     }
 
