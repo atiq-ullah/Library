@@ -3,20 +3,33 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Spectre.Console;
 
-var table = new Table();
-table.AddColumn("Title");
-table.AddColumn("Author(s)");
-DbConnection tableConn = new DbConnection();
-List<Book> displayBookList = DbConnection.ListBooks();
-foreach (var item in displayBookList)
+static Table CreateTable(List<string> cols)
 {
-    table.AddRow(item.Title, item.AuthorNames);
+  Table tb = new Table();
+  foreach (var col in cols)
+    tb.AddColumn(col);
+  return tb;
 }
-AnsiConsole.Write(table);
 
+static List<Book> GrabBooks()
+{
+  DbConnection tableConn = new DbConnection();
+  List<Book> books = DbConnection.ListBooks();
+  return books;
+}
+
+static void ShowTable()
+{
+List<Book> displayBookList = GrabBooks();
+var tb = CreateTable(new List<string>() { "Title", "Author(s)" });
+foreach (var item in displayBookList)
+  tb.AddRow(item.Title,item.Authors);
+AnsiConsole.Write(tb);
+}
+
+static async Task Run()
+{
 string choice = TUI.DbActionChoice();
-// string choice = "Add";
-
 switch (choice)
 {
     case "Add":
@@ -30,7 +43,7 @@ switch (choice)
         DbConnection conn = new DbConnection();
         foreach (Book item in rows)
           if (selected.Contains(item.Title)) {
-            DbConnection.AddBook(item.Title, String.Join(", ", item.AuthorNames));
+            DbConnection.AddBook(item.Title, item.Authors);
           }
         break;
     case "Remove":
@@ -43,25 +56,9 @@ switch (choice)
         break;
     default:
         break;
-        // Will be the same as list
 }
-/*
-// Prepare parameters
-List<string> fields = new List<string>() { "key", "title", "author_name" };
-SearchParameters sp = new SearchParameters(fields, TUI.GetInput());
+ShowTable();
+}
 
-// Send request and process results
-RequestClient client = new RequestClient(sp);
-JObject data = JsonConvert.DeserializeObject<JObject>(await client.MakeSearchRequest())!;
-string[] rows = RequestClient.ProcessRows(data);
 
-// Output result
-string selected = TUI.OutputResult(rows);
-Console.WriteLine("Selected: " + selected);
-
-   DbConnection conn = new DbConnection();
-   DbConnection.AddBook("money");
-DbConnection.GetBooks();
-DbConnection.RemoveBook("silo");
-
-*/
+await Run();

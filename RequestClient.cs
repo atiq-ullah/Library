@@ -29,22 +29,19 @@ namespace Library
         public SearchParameters Parameters { get; set; }
         private static string BaseUrl = "https://openlibrary.org/search.json?";
 
-        public static Book ProcessDocument(JObject item)
+        public static Book? ProcessDocument(JObject item)
         {
-            Book newBook = new Book();
-            var title = item.Property("title")?.Value;
+            var title = item.Property("title")?.Value.ToString();
             var authorNames = item.Property("author_name")?.Value;
-            var key = item.Property("key")?.Value;
-
-            string authors = "";
-
-            if (title != null) newBook.Title = title.ToString();
-            if (authorNames != null)
+            var key = item.Property("key")?.Value.ToString();
+            if (title != null && authorNames != null && key != null)
+            {
+              var authorList = new List<string>();
               foreach (var author in authorNames)
-                authors += author.ToString() + ", ";
-            if (key != null) newBook.Key = key.ToString();
-            newBook.AuthorNames = authors.TrimEnd(',');
-            return newBook;
+                authorList.Add(author.ToString());
+              return new Book(title, String.Join(", ", authorList), key);
+            }
+            return null;
         }
 
         public static List<Book> ProcessRows(JObject data)
@@ -53,8 +50,9 @@ namespace Library
             List<Book> rows = new List<Book>();
             foreach (JObject item in docs.Take(100))
             {
-                Book b = ProcessDocument(item);
-                rows.Add(b);
+                Book? b = ProcessDocument(item);
+                if (b != null)
+                  rows.Add(b);
             }
 
             return rows;

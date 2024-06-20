@@ -2,16 +2,15 @@ namespace Library
 {
     public class Book
     {
-        public Book() : this("", "", "") { }
-        public Book(string title, string author, string key)
+        public Book(string title, string authors, string key)
         {
             Title = title;
-            AuthorNames = author;
+            Authors = authors;
             Key = key;
         }
 
         public string Title { get; set; }
-        public string AuthorNames { get; set; }
+        public string Authors { get; set; }
         public string Key { get; set; }
     }
 
