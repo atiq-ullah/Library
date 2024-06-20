@@ -7,26 +7,28 @@ namespace Library
         public DbConnection() { }
         public static void GetBooks()
         {
-          try {
-            using (var connection = new SqliteConnection($"Data Source={dataSource}"))
+            try
             {
-              connection.Open();
-              var command = connection.CreateCommand();
-              command.CommandText = "SELECT * FROM books";
-              using (var reader = command.ExecuteReader())
-              {
-                while (reader.Read())
+                using (var connection = new SqliteConnection($"Data Source={dataSource}"))
                 {
-                  var str = reader.GetString(1);
-                  Console.WriteLine("Title: " + str);
-                }
-              }
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT * FROM books";
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var str = reader.GetString(1);
+                            Console.WriteLine("Title: " + str);
+                        }
+                    }
 
+                }
             }
-          } catch (Exception e)
-          {
-            Console.WriteLine("Error encountered: " + e.Message);
-          }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error encountered: " + e.Message);
+            }
         }
 
         public static void RemoveBook(string title)
@@ -126,5 +128,35 @@ namespace Library
                 return false;
             }
         }
+
+        public static List<string> ListBooks()
+        {
+            List<string> titles = new List<string>();
+            try
+            {
+                using (var connection = new SqliteConnection($"Data Source={dataSource}"))
+                {
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT * FROM books";
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            titles.Add(reader.GetString(1));
+                        }
+                    }
+
+                }
+                return titles;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error encountered: " + e.Message);
+                return titles;
+            }
+        }
+
     }
 }
