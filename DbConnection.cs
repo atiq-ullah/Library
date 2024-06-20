@@ -64,7 +64,7 @@ namespace Library
         }
 
 
-        public static void AddBook(string title)
+        public static void AddBook(string title, string authors)
         {
             try
             {
@@ -82,8 +82,9 @@ namespace Library
                     {
                         connection.Open();
                         var command = connection.CreateCommand();
-                        command.CommandText = "INSERT INTO books (title) VALUES (@title)";
+                        command.CommandText = "INSERT INTO books (title, authors) VALUES (@title, @authors)";
                         command.Parameters.AddWithValue("@title", title);
+                        command.Parameters.AddWithValue("@authors", authors);
                         Console.WriteLine($"Attempting to add {title}");
                         command.ExecuteNonQuery();
                         Console.WriteLine("Book added successfully");
@@ -129,9 +130,9 @@ namespace Library
             }
         }
 
-        public static List<string> ListBooks()
+        public static List<Book> ListBooks()
         {
-            List<string> titles = new List<string>();
+            List<Book> titles = new List<Book>();
             try
             {
                 using (var connection = new SqliteConnection($"Data Source={dataSource}"))
@@ -143,7 +144,7 @@ namespace Library
                     {
                         while (reader.Read())
                         {
-                            titles.Add(reader.GetString(1));
+                            titles.Add(new Book(reader.GetString(1), reader.GetString(2), reader.GetString(0)));
                         }
                     }
 

@@ -32,40 +32,32 @@ namespace Library
         public static Book ProcessDocument(JObject item)
         {
             Book newBook = new Book();
-
             var title = item.Property("title")?.Value;
             var authorNames = item.Property("author_name")?.Value;
             var key = item.Property("key")?.Value;
 
+            string authors = "";
+
             if (title != null) newBook.Title = title.ToString();
             if (authorNames != null)
-            {
-                foreach (var author in authorNames)
-                {
-                    newBook.AuthorNames.Add(author.ToString());
-                }
-            }
+              foreach (var author in authorNames)
+                authors += author.ToString() + ", ";
             if (key != null) newBook.Key = key.ToString();
-
+            newBook.AuthorNames = authors;
             return newBook;
         }
 
-        public static string[] ProcessRows(JObject data)
+        public static List<Book> ProcessRows(JObject data)
         {
-
             JArray docs = (JArray)data["docs"]!;
-            List<string> rows = new List<string>();
-
-            // Output results
+            List<Book> rows = new List<Book>();
             foreach (JObject item in docs.Take(100))
             {
                 Book b = ProcessDocument(item);
-                string title = b.Title;
-                string authors = String.Join(", ", b.AuthorNames);
-                rows.Add($"{title} - {authors}");
+                rows.Add(b);
             }
 
-            return rows.ToArray();
+            return rows;
         }
     }
 }

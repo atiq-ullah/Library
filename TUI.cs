@@ -18,28 +18,17 @@ namespace Library
             return AnsiConsole.Ask<string>("Enter a book [green]name[/]: ");
         }
 
-        public static string OutputResult(string[] rows)
+        public static List<string> OutputResultMultiSelect(List<Book> rows)
         {
-            var selection = AnsiConsole.Prompt(
-             new SelectionPrompt<string>()
-                  .Title("Choose one: ")
-                  .PageSize(10)
-                  .MoreChoicesText("Move up and down to reveal more")
-                  .AddChoices(rows)
-                );
-
-            return selection;
-        }
-        public static List<string> OutputResultMultiSelect(string[] rows)
-        {
+            List<string> sRows = new List<string>();
+            foreach (Book b in rows) sRows.Add(b.Title);
             var selection = AnsiConsole.Prompt(
              new MultiSelectionPrompt<string>()
                   .Title("Choose one: ")
                   .PageSize(10)
                   .MoreChoicesText("Move up and down to reveal more")
-                  .AddChoices(rows)
+                  .AddChoices(sRows.ToArray())
                 );
-
             return selection;
         }
 
