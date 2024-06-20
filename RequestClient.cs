@@ -43,7 +43,7 @@ namespace Library
               foreach (var author in authorNames)
                 authors += author.ToString() + ", ";
             if (key != null) newBook.Key = key.ToString();
-            newBook.AuthorNames = authors;
+            newBook.AuthorNames = authors.TrimEnd(',');
             return newBook;
         }
 
