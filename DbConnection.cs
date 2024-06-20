@@ -19,7 +19,6 @@ namespace Library
                         while (reader.Read())
                         {
                             var str = reader.GetString(1);
-                            Console.WriteLine("Title: " + str);
                         }
                     }
 
@@ -39,21 +38,17 @@ namespace Library
 
                 if (!exists)
                 {
-                    Console.WriteLine("Book does not exist, nothing to remove.");
                     return;
                 }
                 else
                 {
-                    Console.WriteLine("Book does exist, removing...");
                     using (var connection = new SqliteConnection($"Data Source={dataSource}"))
                     {
                         connection.Open();
                         var command = connection.CreateCommand();
                         command.CommandText = "DELETE FROM books WHERE title = @title";
                         command.Parameters.AddWithValue("@title", title);
-                        Console.WriteLine($"Attempting to remove {title}");
                         command.ExecuteNonQuery();
-                        Console.WriteLine("Book removed successfully");
                     }
                 }
             }
@@ -64,7 +59,7 @@ namespace Library
         }
 
 
-        public static void AddBook(string title, string authors)
+        public static void AddBook(string title, string authorNames)
         {
             try
             {
@@ -72,22 +67,18 @@ namespace Library
 
                 if (exists)
                 {
-                    Console.WriteLine("Book already exists");
                     return;
                 }
                 else
                 {
-                    Console.WriteLine("Book does not exist");
                     using (var connection = new SqliteConnection($"Data Source={dataSource}"))
                     {
                         connection.Open();
                         var command = connection.CreateCommand();
                         command.CommandText = "INSERT INTO books (title, authors) VALUES (@title, @authors)";
                         command.Parameters.AddWithValue("@title", title);
-                        command.Parameters.AddWithValue("@authors", authors);
-                        Console.WriteLine($"Attempting to add {title}");
+                        command.Parameters.AddWithValue("@authors", authorNames);
                         command.ExecuteNonQuery();
-                        Console.WriteLine("Book added successfully");
                     }
                 }
             }
@@ -107,19 +98,11 @@ namespace Library
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
-                    Console.WriteLine($"Checking if {title} exists");
                     command.CommandText = "SELECT * FROM books WHERE title = @title ";
                     command.Parameters.AddWithValue("@title", title);
                     using (var reader = command.ExecuteReader())
-                    {
                         while (reader.Read())
-                        {
-                            Console.WriteLine("It does");
-                            return true;
-                        }
-                    }
-
-                    Console.WriteLine("No book with that title exists");
+                          return true;
                     return false;
                 }
             }
@@ -132,30 +115,35 @@ namespace Library
 
         public static List<Book> ListBooks()
         {
-            List<Book> titles = new List<Book>();
+            var books = new List<Book>();
+            string commandText = "SELECT * FROM books";
             try
             {
                 using (var connection = new SqliteConnection($"Data Source={dataSource}"))
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
-                    command.CommandText = "SELECT * FROM books";
+                    command.CommandText = commandText;
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            titles.Add(new Book(reader.GetString(1), reader.GetString(2), reader.GetString(0)));
+                          var key = reader.GetString(0);
+                          var title = reader.GetString(1);
+                          var authors = reader.GetString(2);
+
+                          Book b = new Book(title, authors, key);
+                          books.Add(b);
                         }
                     }
 
                 }
-                return titles;
-
+                return books;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error encountered: " + e.Message);
-                return titles;
+                return books;
             }
         }
 
