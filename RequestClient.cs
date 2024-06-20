@@ -36,10 +36,10 @@ namespace Library
             var key = item.Property("key")?.Value.ToString();
             if (title != null && authorNames != null && key != null)
             {
-              var authorList = new List<string>();
-              foreach (var author in authorNames)
-                authorList.Add(author.ToString());
-              return new Book(title, String.Join(", ", authorList), key);
+                var authorList = new List<string>();
+                foreach (var author in authorNames)
+                    authorList.Add(author.ToString());
+                return new Book(title, String.Join(", ", authorList), key);
             }
             return null;
         }
@@ -52,7 +52,7 @@ namespace Library
             {
                 Book? b = ProcessDocument(item);
                 if (b != null)
-                  rows.Add(b);
+                    rows.Add(b);
             }
 
             return rows;

@@ -21,7 +21,7 @@ namespace Library
         public static List<string> OutputResultMultiSelect(List<Book> rows)
         {
             List<string> sRows = new List<string>();
-            foreach (Book b in rows) sRows.Add(b.Title);
+            foreach (Book b in rows) sRows.Add($"{b.Title} ({b.Authors})");
             var selection = AnsiConsole.Prompt(
              new MultiSelectionPrompt<string>()
                   .Title("Choose one: ")
