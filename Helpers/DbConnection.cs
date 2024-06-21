@@ -48,13 +48,50 @@ namespace Library
                         var command = connection.CreateCommand();
                         command.CommandText = "DELETE FROM books WHERE title = @title";
                         command.Parameters.AddWithValue("@title", title);
-                        command.ExecuteNonQuery();
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var str = reader.GetString(0);
+                            }
+                        }
                     }
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error encountered: " + e.Message);
+            }
+        }
+
+        private static bool CheckIfTableExists()
+        {
+
+            try
+
+            {
+                using (var connection = new SqliteConnection($"Data Source={dataSource}"))
+                {
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT name FROM sqlite_master WHERE name = 'books';";
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var str = reader.GetString(0);
+                            Console.WriteLine($"{str} already exists!");
+                            return true;
+
+                        }
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error encountered: " + e.Message);
+                return false;
             }
         }
 
@@ -81,8 +118,12 @@ namespace Library
         {
             try
             {
-                CreateBooksTable();
-                Boolean exists = CheckIfBookAlreadyExists(title);
+                bool tableExists = CheckIfTableExists();
+                if (!tableExists)
+                {
+                    CreateBooksTable();
+                }
+                bool exists = CheckIfBookAlreadyExists(title);
 
                 if (exists)
                 {
