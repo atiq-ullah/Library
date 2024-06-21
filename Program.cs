@@ -42,11 +42,11 @@ static async Task Run()
             List<string> selected = TUI.OutputResultMultiSelect(rows);
             DbConnection conn = new DbConnection();
             foreach (Book item in rows)
-                if (selected.Contains($"{item.Title} ({ item.Authors })"))
+                if (selected.Contains($"{item.Title} ({item.Authors})"))
                     DbConnection.AddBook(item.Title, item.Authors);
             AnsiConsole.WriteLine("Successfully added the following books: ");
             foreach (string item in selected)
-              AnsiConsole.WriteLine(item);
+                AnsiConsole.WriteLine(item);
             break;
         case "Remove":
             // Provide list of books with single select
@@ -57,7 +57,7 @@ static async Task Run()
                 DbConnection.RemoveBook(item);
             AnsiConsole.WriteLine("Successfully removed the following books: ");
             foreach (string item in selectedToRemove)
-              AnsiConsole.WriteLine(item);
+                AnsiConsole.WriteLine(item);
             break;
         case "List":
             ShowTable();
