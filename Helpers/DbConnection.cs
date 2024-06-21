@@ -58,11 +58,30 @@ namespace Library
             }
         }
 
+        private static void CreateBooksTable()
+        {
+            try
+
+            {
+                using (var connection = new SqliteConnection($"Data Source={dataSource}"))
+                {
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = "CREATE TABLE books(title TEXT, authors TEXT, id INTEGER AUTOINCREMENT)";
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error encountered: " + e.Message);
+            }
+        }
 
         public static void AddBook(string title, string authorNames)
         {
             try
             {
+                CreateBooksTable();
                 Boolean exists = CheckIfBookAlreadyExists(title);
 
                 if (exists)

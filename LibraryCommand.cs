@@ -7,7 +7,7 @@ using Spectre.Console.Cli;
 
 namespace Library
 {
-    internal sealed class LibraryCommand : Command<LibraryCommand.Actions>
+    internal sealed class LibraryCommand : AsyncCommand<LibraryCommand.Actions>
     {
         public sealed class Actions : CommandSettings
         {
@@ -22,22 +22,27 @@ namespace Library
             public bool ListAction { get; init; }
 
         }
-        public override int Execute([NotNull] CommandContext context, [NotNull] Actions actions)
+
+        public override async Task<int> ExecuteAsync([NotNull] CommandContext context,
+                                                     Actions actions)
         {
             string? bookToAdd = actions.AddAction ?? "";
             string? bookToRemove = actions.DeleteAction ?? "";
 
-            if (!String.IsNullOrWhiteSpace(bookToAdd)) {
-              AnsiConsole.WriteLine($"Searching for {bookToAdd}...");
-              Run("Add").ConfigureAwait(true);
+            if (!String.IsNullOrWhiteSpace(bookToAdd))
+            {
+                AnsiConsole.WriteLine($"Searching for {bookToAdd}...");
+                await Run("Add");
             }
-            if (!String.IsNullOrWhiteSpace(bookToRemove)) {
-              AnsiConsole.WriteLine($"Deleting {bookToRemove}...");
-              Run("Remove").ConfigureAwait(true);
+            if (!String.IsNullOrWhiteSpace(bookToRemove))
+            {
+                AnsiConsole.WriteLine($"Deleting {bookToRemove}...");
+                await Run("Remove");
             }
-            if (actions.ListAction) {
-              AnsiConsole.WriteLine("Outputting Library...");
-              Run("List").ConfigureAwait(true);
+            if (actions.ListAction)
+            {
+                AnsiConsole.WriteLine("Outputting Library...");
+                await Run("List");
             }
 
             return 0;
