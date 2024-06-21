@@ -1,4 +1,5 @@
 
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Library
@@ -33,13 +34,13 @@ namespace Library
         {
             var title = item.Property("title")?.Value.ToString();
             var authorNames = item.Property("author_name")?.Value;
-            var key = item.Property("key")?.Value.ToString();
-            if (title != null && authorNames != null && key != null)
+
+            if (title != null && authorNames != null)
             {
                 var authorList = new List<string>();
                 foreach (var author in authorNames)
                     authorList.Add(author.ToString());
-                return new Book(title, String.Join(", ", authorList), key);
+                return new Book(title, String.Join(", ", authorList));
             }
             return null;
         }
@@ -55,6 +56,13 @@ namespace Library
                     rows.Add(b);
             }
 
+            return rows;
+        }
+
+        public static List<Book> ProcessData(string dataToProcess)
+        {
+            JObject data = JsonConvert.DeserializeObject<JObject>(dataToProcess)!;
+            List<Book> rows = RequestClient.ProcessRows(data);
             return rows;
         }
     }

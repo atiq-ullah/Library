@@ -67,7 +67,7 @@ namespace Library
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
-                    command.CommandText = "CREATE TABLE books(title TEXT, authors TEXT, id INTEGER AUTOINCREMENT)";
+                    command.CommandText = "CREATE TABLE books(title TEXT, authors TEXT)";
                     command.ExecuteNonQuery();
                 }
             }
@@ -147,11 +147,10 @@ namespace Library
                     {
                         while (reader.Read())
                         {
-                            var key = reader.GetString(0);
-                            var title = reader.GetString(1);
-                            var authors = reader.GetString(2);
+                            var title = reader.GetString(0);
+                            var authors = reader.GetString(1);
 
-                            Book b = new Book(title, authors, key);
+                            Book b = new Book(title, authors);
                             books.Add(b);
                         }
                     }
